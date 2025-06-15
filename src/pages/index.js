@@ -1,0 +1,5 @@
+export {default as Dashboard} from './Dashboard'
+export {default as AddExpensePage} from './AddExpensePage'
+export {default as ExpensesPage} from './ExpensesPage'
+export {default as LoginPage} from './LoginPage'
+export {default as NotFoundPage} from './NotFoundPage'
