@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import ExpensesPage from "./pages/ExpensesPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
