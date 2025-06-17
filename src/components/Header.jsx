@@ -1,16 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { account } from "../appwrite/appwrite";
+import { useNavigate } from "react-router-dom";
 
 const Link = ({ to, children, className, onClick }) => (
   <a href={to} className={className} onClick={onClick}>
     {children}
   </a>
 );
-
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const toggleMenu = () => setIsOpen(!isOpen);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setIsLoading(true);
+    account
+      .get()
+      .then(() => setIsLoggedIn(true))
+      .catch(() => setIsLoggedIn(false))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await account.deleteSession("current");
+      setIsLoggedIn(false);
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <header className="bg-white shadow-lg border-b border-gray-100">
@@ -45,12 +67,21 @@ export default function Header() {
             Expenses
             <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
           </Link>
-          <Link
-            to="/login"
-            className="px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 hover:shadow-lg transition-all duration-300 font-medium transform hover:-translate-y-0.5"
-          >
-            Login
-          </Link>
+          {isLoading ? null : isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 hover:shadow-lg transition-all duration-300 font-medium transform hover:-translate-y-0.5"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 hover:shadow-lg transition-all duration-300 font-medium transform hover:-translate-y-0.5"
+            >
+              Login
+            </Link>
+          )}
         </nav>
 
         {/* Hamburger Icon */}
@@ -94,13 +125,22 @@ export default function Header() {
           >
             Expenses
           </Link>
-          <Link
-            to="/login"
-            className="block mx-4 my-3 px-4 py-2 text-center text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-all duration-300 font-medium hover:shadow-lg transform hover:-translate-y-0.5"
-            onClick={toggleMenu}
-          >
-            Login
-          </Link>
+          {isLoading ? null : isLoggedIn ? (
+            <Link
+              className="block mx-4 my-3 px-4 py-2 text-center text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-all duration-300 font-medium hover:shadow-lg transform hover:-translate-y-0.5"
+              onClick={handleLogout}
+            >
+              Logout
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="block mx-4 my-3 px-4 py-2 text-center text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-all duration-300 font-medium hover:shadow-lg transform hover:-translate-y-0.5"
+              onClick={toggleMenu}
+            >
+              Login
+            </Link>
+          )}
         </nav>
       </div>
     </header>
