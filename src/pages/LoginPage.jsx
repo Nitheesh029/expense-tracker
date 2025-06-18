@@ -6,14 +6,16 @@ import { useNavigate } from "react-router-dom";
 import { account } from "../appwrite/appwrite";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState(" ");
+  const [password, setPassword] = useState(" ");
+  const [error, setError] = useState(" ");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
+    setPassword(" ");
+    setEmail(" ");
+    setError(" ");
     try {
       await account.createEmailPasswordSession(email, password);
       navigate("/");
@@ -23,7 +25,7 @@ const LoginPage = () => {
   };
   console.log(error);
   return (
-    <div className="md:w-[500px]  mx-auto md:border-2 mt-20 rounded-xl shadow-md flex flex-col gap-10 py-5 md:bg-[#00292D]">
+    <div className="md:w-[500px]  mx-auto md:border-2 mt-20 rounded-xl shadow-md flex flex-col gap-10 py-5 md:bg-[#1B263B] bg-slate-600">
       {error && (
         <p className="text-red-500 text-center font-semibold">{error}</p>
       )}

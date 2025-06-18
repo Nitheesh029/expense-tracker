@@ -28,7 +28,6 @@ export default function Header() {
     try {
       await account.deleteSession("current");
       setIsLoggedIn(false);
-      navigate("/login");
     } catch (error) {
       console.error("Logout failed:", error);
     }
